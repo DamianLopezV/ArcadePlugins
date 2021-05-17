@@ -1,7 +1,7 @@
 import pygame
 import time
 import random
-import threading
+
 
 from pygame.time import delay
 # TODO: falta cambiar a independent frame rate
@@ -183,7 +183,7 @@ class Tubes:
 
 
 def createWindow():
-  (width, height) = (500, 500)
+  (width, height) = (250, 500)
   screen = pygame.display.set_mode((width, height))
   pygame.display.set_caption('Flappy bird')
   pygame.display.set_icon(yellowbird_01)
@@ -202,13 +202,8 @@ def onePlayer():
   
   background = Background(sprites["backgound_01"] if random.randint(0,1) else sprites["backgound_02"],0,0,screen)
   floor = Background(sprites["floor"],-2,400,screen)
-  background2 = Background(sprites["backgound_01"] if random.randint(0,1) else sprites["backgound_02"],250,0,screen)
-  floor2 = Background(sprites["floor"],248,400,screen)
   player1 = Player(sprites["yellowbird"],100,200,screen,1)
-  tube = Tubes(sprites["greenTube"],500,150,screen)
-  tube2 = Tubes(sprites["greenTube"],700,150,screen)
-  tube3 = Tubes(sprites["greenTube"],900,150,screen)
-
+  tube = Tubes(sprites["greenTube"],300,150,screen)
   fps = 0
 
   while running:
@@ -219,24 +214,53 @@ def onePlayer():
     fps = calculateFPS(fps)
     background.draw()
     floor.draw()
-    background2.draw()
-    floor2.draw()
-    tube.move(2,fps)
+    tube.move(3,fps)
     tube.draw()
-    tube2.move(2,fps)
-    tube2.draw()
-    tube3.move(2,fps)
-    tube3.draw()
     player1.draw(fps)
     player1.fall(fps)
     #colisions
     player1.die(floor.rect)
     player1.die(tube.Drect)
     player1.die(tube.UPrect)
-    player1.die(tube2.Drect)
-    player1.die(tube2.UPrect)
-    player1.die(tube3.Drect)
-    player1.die(tube3.UPrect)
+
+    for event in pygame.event.get():
+      if event.type == pygame.QUIT:
+        running = False
+      if event.type == pygame.KEYDOWN:
+        player1.jump(event,fps)
+def twoPlayers():
+  pygame.init()
+  screen = createWindow() 
+  running = True
+  
+  background = Background(sprites["backgound_01"] if random.randint(0,1) else sprites["backgound_02"],0,0,screen)
+  floor = Background(sprites["floor"],-2,400,screen)
+  player1 = Player(sprites["yellowbird"],100,200,screen,1)
+  player2 = Player(sprites["yellowbird"],100,200,screen,2)
+  tube = Tubes(sprites["greenTube"],300,150,screen)
+  fps = 0
+
+  while running:
+    pygame.display.update()
+    time.sleep(1/60)
+    # fps = pygame.time.get_ticks() # deltaTime in seconds. deltaTime = (t - getTicksLastFrame) / 1000.0 getTicksLastFrame = t
+    #draw
+    fps = calculateFPS(fps)
+    background.draw()
+    floor.draw()
+    tube.move(3,fps)
+    tube.draw()
+    player1.draw(fps)
+    player1.fall(fps)
+    player2.draw(fps)
+    player2.fall(fps)
+    #colisions
+    player1.die(floor.rect)
+    player1.die(tube.Drect)
+    player1.die(tube.UPrect)
+    player2.die(floor.rect)
+    player2.die(tube.Drect)
+    player2.die(tube.UPrect)
 
     for event in pygame.event.get():
       if event.type == pygame.QUIT:
