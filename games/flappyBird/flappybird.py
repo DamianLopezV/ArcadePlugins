@@ -16,18 +16,26 @@ sprites["floor"] = pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuar
 
 class Player:
     def __init__(self, images, x, y, screen):
+        #setting images
         for i in range(0,len(images)):
           images[i] = pygame.transform.scale(images[i], (images[i].get_width()*size, images[i].get_height()*size))
+        #animations
         self.animations = images
         self.image = images[0]
+        #sprites
         self.width = images[0].get_width()
         self.height = images[0].get_height()
         self.rect = pygame.Rect(x, y, self.width, self.height)
         self.screen = screen
+        #falling
         self.falling = True
         self.fallingFPS = 1
+        #animation  fps
         self.animationFPS = 3
         self.animationcont = 0
+        #rotating 
+        self.rotaringfps = 10
+        self.angle = 0
 
     def jump(self,event,fps):
       if event.key == pygame.K_SPACE:
@@ -39,7 +47,7 @@ class Player:
 
     def fall(self,fps):
       if (self.falling == True):
-        self.rect.y += 4
+        self.rect.y += 5
       else:
         self.rect.y -= 4
       if (self.fallingFPS == fps):
@@ -58,11 +66,25 @@ class Player:
       if (self.animationFPS > 60):
         self.animationFPS -= 60
 
-      self.screen.blit(self.animations[self.animationcont], (self.rect.x, self.rect.y))
+      if(self.falling == False):
+        self.angle +=15
+        if(self.angle>30):
+          self.angle=30
+        rotatedImage,rotatedRect = self.rotatePlayer(self.animations[self.animationcont],self.rect,self.angle)
+        self.screen.blit(rotatedImage, rotatedRect)
+        return None
 
+      self.angle -= 7.5
+      if(self.angle<-90):
+        self.angle =-90
+      rotatedImage,rotatedRect = self.rotatePlayer(self.animations[self.animationcont],self.rect,self.angle)
+      # self.screen.blit(self.animations[self.animationcont], (self.rect.x, self.rect.y))
+      self.screen.blit(rotatedImage, rotatedRect)
 
-
-
+    def rotatePlayer(self,image, rect, angle):
+      rotatedImage = pygame.transform.rotate(image, angle)
+      rotatedRect = rotatedImage.get_rect(center=rect.center)
+      return rotatedImage,rotatedRect
 
 class Background:
 
@@ -86,11 +108,13 @@ def createWindow():
   pygame.display.set_caption('Flappy bird')
 
   return screen
+
 def calculateFPS(fps):
     fps+=1
     if(fps == 61):
       return 1
     return fps
+
 def main():
   pygame.init()
   screen = createWindow() 
@@ -101,8 +125,8 @@ def main():
   background2 = Background(sprites["backgound_01"] if random.randint(0,1) else sprites["backgound_02"],250,0,screen)
   floor2 = Background(sprites["floor"],248,400,screen)
   player = Player(sprites["yellowbird"],100,200,screen)
-  
   fps = 0
+
   while running:
     pygame.display.update()
     time.sleep(1/60)
@@ -113,7 +137,6 @@ def main():
     floor2.draw()
     player.draw(fps)
     player.fall(fps)
-
 
     for event in pygame.event.get():
       if event.type == pygame.QUIT:
