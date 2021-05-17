@@ -169,7 +169,6 @@ class Tubes:
         self.screen.blit(self.Dimage, (self.Drect.x, self.Drect.y))
 
     def move(self,speed,fps):
-      print("ahh")
       if(not self.startMoving):
         if(fps == 60):
           self.delayTimer+=1
@@ -233,14 +232,11 @@ def onePlayer():
     floor.draw()
     background2.draw()
     floor2.draw()
-    hilo = threading.Thread(target=tube.move, args=(2,fps))
-    hilo.start()
+    tube.move(2,fps)
     tube.draw()
-    hilo2 =threading.Thread(target=tube2.move, args=(2,fps))
-    hilo2.start()
+    tube2.move(2,fps)
     tube2.draw()
-    hilo3 =threading.Thread(target=tube3.move, args=(2,fps))
-    hilo3.start()
+    tube3.move(2,fps)
     tube3.draw()
     player1.draw(fps)
     player1.fall(fps)
