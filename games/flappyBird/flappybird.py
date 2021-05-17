@@ -158,7 +158,7 @@ class Tubes:
         self.Drect = pygame.Rect(x+2, y-318 - self.separation, self.UPwidth, self.UPheight)
         self.DmoveFPS = 40
         #delay to move
-        self.delaySeconds = 1
+        self.delaySeconds = 3
         self.delayTimer = 0
         self.startMoving = False
         #spawn fps 
@@ -186,6 +186,7 @@ class Tubes:
         self.Drect.y = y -318 - self.separation
         self.UPrect.x = self.originalX
         self.Drect.x = self.originalX+2
+        #maybe
         self.startMoving = False
         self.delayTimer = 0
         
