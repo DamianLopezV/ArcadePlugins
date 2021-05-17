@@ -6,47 +6,69 @@ import random
 size = 2
 #sprites
 sprites = dict()
-sprites["bird_01"] =  pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/bird_01.png")
+yellowbird_01 =  pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/yellowbird_01.png")
+yellowbird_02 =  pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/yellowbird_02.png")
+yellowbird_03 =  pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/yellowbird_03.png")
+sprites["yellowbird"] =  [yellowbird_01,yellowbird_02,yellowbird_03]
 sprites["backgound_01"] = pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/background_01.png")
 sprites["backgound_02"] = pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/background_02.png")
 sprites["floor"] = pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/floor.png")
 
 class Player:
-    def __init__(self, image, x, y, screen):
-        image = pygame.transform.scale(image, (image.get_width()*size, image.get_height()*size))
-        self.image = image
-        self.width = image.get_width()
-        self.height = image.get_height()
+    def __init__(self, images, x, y, screen):
+        for i in range(0,len(images)):
+          images[i] = pygame.transform.scale(images[i], (images[i].get_width()*size, images[i].get_height()*size))
+        self.animations = images
+        self.image = images[0]
+        self.width = images[0].get_width()
+        self.height = images[0].get_height()
         self.rect = pygame.Rect(x, y, self.width, self.height)
         self.screen = screen
         self.falling = True
-        self.fallingFPS = 0
+        self.fallingFPS = 1
+        self.animationFPS = 3
+        self.animationcont = 0
 
     def jump(self,event,fps):
       if event.key == pygame.K_SPACE:
         self.falling = False
         self.fallingFPS = fps + 15
-        if self.fallingFPS >60:
+        if (self.fallingFPS > 60):
           self.fallingFPS -= 60
 
 
     def fall(self,fps):
-      if self.falling == True:
+      if (self.falling == True):
         self.rect.y += 4
       else:
         self.rect.y -= 4
-      if self.fallingFPS == fps:
-        self.fallingFPS = 0
+      if (self.fallingFPS == fps):
+        self.fallingFPS = 1
         self.falling = True
       
 
-    def draw(self):
-        self.screen.blit(self.image, (self.rect.x, self.rect.y))
+    def draw(self,fps):
+      if (self.animationFPS == fps):
+        self.animationFPS = fps + 3
+        self.animationcont+=1
+
+      if (self.animationcont > 2):
+        self.animationcont = 0
+
+      if (self.animationFPS > 60):
+        self.animationFPS -= 60
+
+      self.screen.blit(self.animations[self.animationcont], (self.rect.x, self.rect.y))
+
+
+
+
 
 class Background:
 
     def __init__(self, image,x,y,screen):
         image = pygame.transform.scale(image, (image.get_width()*size, image.get_height()*size))
+        self.image = image
         self.image = image
         self.width = image.get_width()
         self.height = image.get_height()
@@ -78,19 +100,18 @@ def main():
   floor = Background(sprites["floor"],-2,400,screen)
   background2 = Background(sprites["backgound_01"] if random.randint(0,1) else sprites["backgound_02"],250,0,screen)
   floor2 = Background(sprites["floor"],248,400,screen)
-  player = Player(sprites["bird_01"],100,200,screen)
+  player = Player(sprites["yellowbird"],100,200,screen)
   
   fps = 0
   while running:
     pygame.display.update()
     time.sleep(1/60)
     fps = calculateFPS(fps)
-    print(fps)
     background.draw()
     floor.draw()
     background2.draw()
     floor2.draw()
-    player.draw()
+    player.draw(fps)
     player.fall(fps)
 
 
