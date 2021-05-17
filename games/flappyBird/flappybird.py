@@ -4,7 +4,7 @@ import random
 import threading
 
 from pygame.time import delay
-
+# TODO: falta cambiar a independent frame rate
 #variables
 size = 2
 #sprites
@@ -157,25 +157,12 @@ class Tubes:
         self.Dheight = image.get_height()
         self.Drect = pygame.Rect(x+2, y-318 - self.separation, self.UPwidth, self.UPheight)
         self.DmoveFPS = 40
-        #delay to move
-        self.delaySeconds = 3
-        self.delayTimer = 0
-        self.startMoving = False
-        #spawn fps 
-
 
     def draw(self):
         self.screen.blit(self.UPimage, (self.UPrect.x, self.UPrect.y))
         self.screen.blit(self.Dimage, (self.Drect.x, self.Drect.y))
 
     def move(self,speed,fps):
-      if(not self.startMoving):
-        if(fps == 60):
-          self.delayTimer+=1
-        if(self.delaySeconds == self.delayTimer):
-          self.startMoving = True
-        if(not self.startMoving):
-          return None
 
       self.UPrect.x-=speed
       self.Drect.x-=speed
@@ -227,6 +214,7 @@ def onePlayer():
   while running:
     pygame.display.update()
     time.sleep(1/60)
+    # fps = pygame.time.get_ticks() # deltaTime in seconds. deltaTime = (t - getTicksLastFrame) / 1000.0 getTicksLastFrame = t
     #draw
     fps = calculateFPS(fps)
     background.draw()
