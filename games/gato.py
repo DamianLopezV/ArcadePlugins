@@ -1,14 +1,12 @@
 import pygame
 import random
+#TODO: UI
 #colors
 colors = dict()
 colors["white"] = (255,255,255)
 colors["red"] = (255, 42, 55)
 colors["blue"] = (0, 135, 255)
 colors["gray"] = (204, 204, 204)
-
-
-
 #screen size
 size = 120
 import pygame
