@@ -1,19 +1,28 @@
 import pygame
 import time
 import random
-
-
-from pygame.time import delay
 # TODO: poner mas sprites
 #variables
 size = 2
 #sprites
 sprites = dict()
 #player yellow bird
-yellowbird_01 =  pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/yellowbird_01.png")
-yellowbird_02 =  pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/yellowbird_02.png")
-yellowbird_03 =  pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/yellowbird_03.png")
-sprites["yellowbird"] =  [yellowbird_01,yellowbird_02,yellowbird_03]
+sprite = random.randint(1,3)
+if(sprite == 1):
+  yellowbird_01 =  pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/yellowbird_01.png")
+  yellowbird_02 =  pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/yellowbird_02.png")
+  yellowbird_03 =  pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/yellowbird_03.png")
+  sprites["bird"] =  [yellowbird_01,yellowbird_02,yellowbird_03]
+elif(sprite == 2):
+  redbird_01 =  pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/redbird_01.png")
+  redbird_02 =  pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade\games/flappyBird/sprites/redbird_02.png")
+  redbird_03 =  pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/redbird_03.png")
+  sprites["bird"] =  [redbird_01,redbird_02,redbird_03]
+elif(sprite == 3):
+  bluebird_01 =  pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/bluebird_01.png")
+  bluebird_02 =  pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/bluebird_02.png")
+  bluebird_03 =  pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/bluebird_03.png")
+  sprites["bird"] =  [bluebird_01,bluebird_02,bluebird_03]
 #background 
 sprites["backgound_01"] = pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/background_01.png")
 sprites["backgound_02"] = pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/background_02.png")
@@ -28,7 +37,6 @@ class Player:
         for i in range(0,len(images)):
           self.animations.append( pygame.transform.scale(images[i], (images[i].get_width()*size, images[i].get_height()*size)))
         #animations
-
         self.image = images[0]
         #sprites 
         self.width = images[0].get_width()
@@ -176,7 +184,9 @@ class Tubes:
         self.screen.blit(self.Dimage, (self.Drect.x, self.Drect.y))
         self.screen.blit(self.pointCounter, (self.pointColider.x,self.pointColider.y))
 
-    def move(self,speed,fps):
+    def move(self,speed,alive):
+      if(not alive):
+        return None
 
       self.UPrect.x-=speed
       self.Drect.x-=speed
@@ -195,14 +205,14 @@ class Tubes:
         
     def rotateTube(self,image, angle):
       rotatedImage = pygame.transform.rotate(image, angle)
-      return rotatedImage
+      return rotatedImage 
 
 
 def createWindow():
-  (width, height) = (250, 500)
+  (width, height) = (125*size, 250*size)
   screen = pygame.display.set_mode((width, height))
   pygame.display.set_caption('Flappy bird')
-  pygame.display.set_icon(yellowbird_01)
+  pygame.display.set_icon(sprites["bird"][1])
   return screen
 
 def calculateFPS(fps):
@@ -218,7 +228,7 @@ def onePlayer():
   
   background = Background(sprites["backgound_01"] if random.randint(0,1) else sprites["backgound_02"],0,0,screen)
   floor = Background(sprites["floor"],-2,400,screen)
-  player1 = Player(sprites["yellowbird"],100,200,screen,1)
+  player1 = Player(sprites["bird"],100,200,screen,1)
   tube = Tubes(sprites["greenTube"],300,150,screen)
   fps = 0
 
@@ -230,7 +240,7 @@ def onePlayer():
     fps = calculateFPS(fps)
     background.draw()
     floor.draw()
-    tube.move(3,fps)
+    tube.move(3,player1.alive)
     tube.draw()
     player1.draw(fps)
     player1.fall(fps)
@@ -252,8 +262,8 @@ def twoPlayers():
   
   background = Background(sprites["backgound_01"] if random.randint(0,1) else sprites["backgound_02"],0,0,screen)
   floor = Background(sprites["floor"],-2,400,screen)
-  player1 = Player(sprites["yellowbird"],100,200,screen,1)
-  player2 = Player(sprites["yellowbird"],100,200,screen,2)
+  player1 = Player(sprites["bird"],100,200,screen,1)
+  player2 = Player(sprites["bird"],100,200,screen,2)
   tube = Tubes(sprites["greenTube"],300,150,screen)
   fps = 0
 
