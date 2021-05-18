@@ -1,7 +1,7 @@
 import pygame
 import time
 import random
-# TODO: poner mas sprites
+# TODO: poner paths relativos
 #variables
 size = 2
 #sprites
@@ -74,7 +74,7 @@ class Player:
 
     def fall(self,fps):
       if (self.falling == True):
-        self.rect.y += 5
+        self.rect.y += 4.5
       else:
         self.rect.y -= 3.5
       if (self.fallingFPS == fps):
