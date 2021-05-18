@@ -4,7 +4,7 @@ import random
 
 
 from pygame.time import delay
-# TODO: falta cambiar a independent frame rate
+# TODO: poner mas sprites
 #variables
 size = 2
 #sprites
@@ -48,6 +48,8 @@ class Player:
         self.alive = True
         #multiplayer
         self.playerNumber = playerNumber
+        #score
+        self.score=0
 
     def jump(self,event,fps):
       if event.key == pygame.K_SPACE and self.alive and self.playerNumber ==1:
@@ -78,6 +80,8 @@ class Player:
       
 
     def draw(self,fps):
+      texto1 = pygame.font.Font(None, 30).render(f"{self.score}", 0, (255, 255, 255))
+      self.screen.blit(texto1, (0,0))
 
       if (self.animationFPS == fps):
         self.animationFPS = fps + 3
@@ -120,6 +124,12 @@ class Player:
       if(self.rect.colliderect(colision)):
         self.alive = False
 
+    def addScore(self,colision):
+      if(self.rect.colliderect(colision) and self.alive):
+        colision.x = -10
+        self.score+=1
+
+
 
 
 class Background:
@@ -143,36 +153,42 @@ class Tubes:
         y = random.randint(200,350)
         self.originalX = x
         self.screen = screen
+        self.width = image.get_width()
+        self.height = image.get_height()
         #separation 
         self.separation = separation
         #upwars
         self.UPimage = image
-        self.UPwidth = image.get_width()
-        self.UPheight = image.get_height()
-        self.UPrect = pygame.Rect(x, y, self.UPwidth, self.UPheight)
+        self.UPrect = pygame.Rect(x, y, self.width, self.height)  
         self.UPmoveFPS = 10
         #downwars
         self.Dimage = self.rotateTube(image,180)
-        self.Dwidth = image.get_width()
-        self.Dheight = image.get_height()
-        self.Drect = pygame.Rect(x+2, y-318 - self.separation, self.UPwidth, self.UPheight)
+        self.Drect = pygame.Rect(x+2, y-318-self.separation, self.width, self.height)
         self.DmoveFPS = 40
+        #point counter
+        self.pointCounter = pygame.Surface((5,self.separation))  # the size of your rect
+        self.pointColider = pygame.Rect(x+25, self.UPrect.y-self.separation, self.width, self.height)
+        self.pointCounter.set_alpha(0)                # alpha level 
+        self.pointCounter.fill((255,255,255))  
 
     def draw(self):
         self.screen.blit(self.UPimage, (self.UPrect.x, self.UPrect.y))
         self.screen.blit(self.Dimage, (self.Drect.x, self.Drect.y))
+        self.screen.blit(self.pointCounter, (self.pointColider.x,self.pointColider.y))
 
     def move(self,speed,fps):
 
       self.UPrect.x-=speed
       self.Drect.x-=speed
+      self.pointColider.x-=speed
       if(self.UPrect.x == -60):
-        print(fps)
         y = random.randint(200,350)
         self.UPrect.y = y 
         self.Drect.y = y -318 - self.separation
+        self.pointColider.y =self.UPrect.y-self.separation
         self.UPrect.x = self.originalX
         self.Drect.x = self.originalX+2
+        self.pointColider.x = self.originalX+25
         #maybe
         self.startMoving = False
         self.delayTimer = 0
@@ -222,6 +238,7 @@ def onePlayer():
     player1.die(floor.rect)
     player1.die(tube.Drect)
     player1.die(tube.UPrect)
+    player1.addScore(tube.pointColider)
 
     for event in pygame.event.get():
       if event.type == pygame.QUIT:
@@ -258,9 +275,11 @@ def twoPlayers():
     player1.die(floor.rect)
     player1.die(tube.Drect)
     player1.die(tube.UPrect)
+    player1.addScore(tube.pointColider)
     player2.die(floor.rect)
     player2.die(tube.Drect)
     player2.die(tube.UPrect)
+    player2.addScore(tube.pointColider)
 
     for event in pygame.event.get():
       if event.type == pygame.QUIT:
