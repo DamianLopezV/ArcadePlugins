@@ -9,7 +9,6 @@ colors["blue"] = (0, 135, 255)
 colors["gray"] = (204, 204, 204)
 #screen size
 size = 120
-import pygame
 
 
 class Rect:
