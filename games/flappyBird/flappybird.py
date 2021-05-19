@@ -1,32 +1,34 @@
 import pygame
 import time
 import random
-# TODO: poner paths relativos
+import os, sys
 #variables
 size = 2
+appFolder = os.path.dirname(os.path.realpath(sys.argv[0]))
+print(appFolder)
 #sprites
 sprites = dict()
 #player yellow bird
 sprite = random.randint(1,3)
 if(sprite == 1):
-  yellowbird_01 =  pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/yellowbird_01.png")
-  yellowbird_02 =  pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/yellowbird_02.png")
-  yellowbird_03 =  pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/yellowbird_03.png")
+  yellowbird_01 =  pygame.image.load(appFolder+"/sprites/yellowbird_01.png")
+  yellowbird_02 =  pygame.image.load(appFolder+"/sprites/yellowbird_02.png")
+  yellowbird_03 =  pygame.image.load(appFolder+"/sprites/yellowbird_03.png")
   sprites["bird"] =  [yellowbird_01,yellowbird_02,yellowbird_03]
 elif(sprite == 2):
-  redbird_01 =  pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/redbird_01.png")
-  redbird_02 =  pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade\games/flappyBird/sprites/redbird_02.png")
-  redbird_03 =  pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/redbird_03.png")
+  redbird_01 =  pygame.image.load(appFolder+"/sprites/redbird_01.png")
+  redbird_02 =  pygame.image.load(appFolder+"/sprites/redbird_02.png")
+  redbird_03 =  pygame.image.load(appFolder+"/sprites/redbird_03.png")
   sprites["bird"] =  [redbird_01,redbird_02,redbird_03]
 elif(sprite == 3):
-  bluebird_01 =  pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/bluebird_01.png")
-  bluebird_02 =  pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/bluebird_02.png")
-  bluebird_03 =  pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/bluebird_03.png")
+  bluebird_01 =  pygame.image.load(appFolder+"/sprites/bluebird_01.png")
+  bluebird_02 =  pygame.image.load(appFolder+"/sprites/bluebird_02.png")
+  bluebird_03 =  pygame.image.load(appFolder+"/sprites/bluebird_03.png")
   sprites["bird"] =  [bluebird_01,bluebird_02,bluebird_03]
 #background 
-sprites["backgound_01"] = pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/background_01.png")
-sprites["backgound_02"] = pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/background_02.png")
-sprites["floor"] = pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/floor.png")
+sprites["backgound_01"] = pygame.image.load(appFolder+"/sprites/background_01.png")
+sprites["backgound_02"] = pygame.image.load(appFolder+"/sprites/background_02.png")
+sprites["floor"] = pygame.image.load(appFolder+"/sprites/floor.png")
 #tubes
 sprites["greenTube"] = pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/greentube_01.png")
 
