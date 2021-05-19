@@ -1,7 +1,9 @@
 import pygame
 import time
 import random
-import os, sys
+import os,sys
+from playsound import playsound
+
 #variables
 size = 2
 appFolder = os.path.dirname(os.path.realpath(sys.argv[0]))
@@ -31,6 +33,16 @@ sprites["backgound_02"] = pygame.image.load(appFolder+"/sprites/background_02.pn
 sprites["floor"] = pygame.image.load(appFolder+"/sprites/floor.png")
 #tubes
 sprites["greenTube"] = pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/greentube_01.png")
+
+#audios
+
+#playsound(appFolder+"/audio/jump.wav")  
+jump = appFolder+"/audio/jump.wav"
+hit = appFolder+"/audio/hit.wav"
+point = appFolder+"/audio/point.wav"
+die = appFolder+"/audio/die.wav"
+
+
 
 class Player:
     def __init__(self, images, x, y, screen,playerNumber):
@@ -63,11 +75,14 @@ class Player:
 
     def jump(self,event,fps):
       if event.key == pygame.K_SPACE and self.alive and self.playerNumber ==1:
+        pygame.mixer.Channel(0).play(pygame.mixer.Sound(jump))
         self.falling = False
         self.fallingFPS = fps + 15
         if (self.fallingFPS > 60):
           self.fallingFPS -= 60
       if event.key == pygame.K_UP and self.alive and self.playerNumber ==2:
+        pygame.mixer.music.load(jump)
+        pygame.mixer.music.play()
         self.falling = False
         self.fallingFPS = fps + 15
         if (self.fallingFPS > 60):
@@ -131,11 +146,14 @@ class Player:
       return rotatedImage,rotatedRect
 
     def die(self,colision):
-      if(self.rect.colliderect(colision)):
+      if(self.rect.colliderect(colision) and self.alive):
+        pygame.mixer.Channel(2).play(pygame.mixer.Sound(hit))
+        pygame.mixer.Channel(3).play(pygame.mixer.Sound(die))
         self.alive = False
 
     def addScore(self,colision):
       if(self.rect.colliderect(colision) and self.alive):
+        pygame.mixer.Channel(1).play(pygame.mixer.Sound(point))
         colision.x = -10
         self.score+=1
 
@@ -225,6 +243,8 @@ def calculateFPS(fps):
 
 def onePlayer():
   pygame.init()
+  pygame.mixer.init()
+  pygame.mixer.set_num_channels(4)
   screen = createWindow() 
   running = True
   
@@ -257,46 +277,4 @@ def onePlayer():
         running = False
       if event.type == pygame.KEYDOWN:
         player1.jump(event,fps)
-def twoPlayers():
-  pygame.init()
-  screen = createWindow() 
-  running = True
-  
-  background = Background(sprites["backgound_01"] if random.randint(0,1) else sprites["backgound_02"],0,0,screen)
-  floor = Background(sprites["floor"],-2,400,screen)
-  player1 = Player(sprites["bird"],100,200,screen,1)
-  player2 = Player(sprites["bird"],100,200,screen,2)
-  tube = Tubes(sprites["greenTube"],300,150,screen)
-  fps = 0
-
-  while running:
-    pygame.display.update()
-    time.sleep(1/60)
-    # fps = pygame.time.get_ticks() # deltaTime in seconds. deltaTime = (t - getTicksLastFrame) / 1000.0 getTicksLastFrame = t
-    #draw
-    fps = calculateFPS(fps)
-    background.draw()
-    floor.draw()
-    tube.move(3,fps)
-    tube.draw()
-    player1.draw(fps)
-    player1.fall(fps)
-    player2.draw(fps)
-    player2.fall(fps)
-    #colisions
-    player1.die(floor.rect)
-    player1.die(tube.Drect)
-    player1.die(tube.UPrect)
-    player1.addScore(tube.pointColider)
-    player2.die(floor.rect)
-    player2.die(tube.Drect)
-    player2.die(tube.UPrect)
-    player2.addScore(tube.pointColider)
-
-    for event in pygame.event.get():
-      if event.type == pygame.QUIT:
-        running = False
-      if event.type == pygame.KEYDOWN:
-        player1.jump(event,fps)
-
 onePlayer()
