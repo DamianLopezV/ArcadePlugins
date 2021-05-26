@@ -3,20 +3,16 @@ import pygame
 import pygame_menu
 
 def start_snake():
-    pygame.QUIT
-    appFolder = os.path.dirname(os.path.realpath(sys.argv[0]))
-    # os.system(f'cmd /k "{appFolder}"')
-    print(appFolder)
-    os.system(f'cmd /k "python games/viborita.py"')
+    os.system(f'cmd /c "python ArcadePlugins/games/viborita.py"')
 
 def start_flappyBird():
-    pass
+    os.system(f'cmd /c "python ArcadePlugins/games/flappyBird/flappybird.py"')
 
 def start_ticTacToe():
-    pass
+    os.system(f'cmd /c "python ArcadePlugins/games/gato.py"')
 
 def start_paint():
-    pass
+    os.system(f'cmd /c "python ArcadePlugins/games/paint.py"')
 
 pygame.init()
 pantalla = pygame.display.set_mode((600,400))
