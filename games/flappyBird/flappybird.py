@@ -30,7 +30,7 @@ sprites["backgound_01"] = pygame.image.load(appFolder+"/sprites/background_01.pn
 sprites["backgound_02"] = pygame.image.load(appFolder+"/sprites/background_02.png")
 sprites["floor"] = pygame.image.load(appFolder+"/sprites/floor.png")
 #tubes
-sprites["greenTube"] = pygame.image.load("C:/Users/PC/OneDrive/Documentos/Up/Up cuarto semestre/desarrolo de plugins/arcade/games/flappyBird/sprites/greentube_01.png")
+sprites["greenTube"] = pygame.image.load(appFolder+"/sprites/greentube_01.png")
 
 class Player:
     def __init__(self, images, x, y, screen,playerNumber):
